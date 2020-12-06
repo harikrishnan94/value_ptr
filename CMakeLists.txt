@@ -16,6 +16,7 @@ set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_MACOSX_RPATH 1)
 
+find_package(Boost 1.74 REQUIRED)
 find_package(benchmark CONFIG REQUIRED)
 
 add_executable(visit visit.cpp)
@@ -23,3 +24,6 @@ target_link_libraries(visit PRIVATE benchmark::benchmark benchmark::benchmark_ma
 
 add_executable(polyshape polyshape.cpp)
 target_link_libraries(polyshape PRIVATE benchmark::benchmark benchmark::benchmark_main)
+
+add_executable(value_ptr value_ptr.cpp)
+target_include_directories(value_ptr PRIVATE ${Boost_INCLUDE_DIRS})

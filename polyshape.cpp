@@ -5,6 +5,7 @@
 
 #include "polymorphic_value.h"
 #include "shapes.h"
+#include "value_ptr.h"
 
 template <typename Interface> class NonCopyableImplementation {
 public:
@@ -27,22 +28,37 @@ static void BM_Virtual(benchmark::State &s) {
 
   for (auto _ : s) {
     area += shape->Area();
+    shape = std::move(shape);
   }
 
   benchmark::DoNotOptimize(area);
 }
 
-static void BM_StdFunction(benchmark::State &s) {
+static void BM_PolyValue(benchmark::State &s) {
   using Shape = nonstd::polymorphic_value<IShape<Numeric>>;
   Shape shape(Rectangle(1.0, 1.0));
   Numeric area = 0;
 
   for (auto _ : s) {
     area += shape->Area();
+    shape = std::move(shape);
+  }
+
+  benchmark::DoNotOptimize(area);
+}
+
+static void BM_ValuePtr(benchmark::State &s) {
+  auto shape = nonstd::make_polymorphic_value<IShape<Numeric>>(Rectangle(1.0, 1.0));
+  Numeric area = 0;
+
+  for (auto _ : s) {
+    area += shape->Area();
+    shape = std::move(shape);
   }
 
   benchmark::DoNotOptimize(area);
 }
 
 BENCHMARK(BM_Virtual);
-BENCHMARK(BM_StdFunction);
+BENCHMARK(BM_PolyValue);
+BENCHMARK(BM_ValuePtr);
