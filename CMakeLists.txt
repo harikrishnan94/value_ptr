@@ -20,3 +20,6 @@ find_package(benchmark CONFIG REQUIRED)
 
 add_executable(visit visit.cpp)
 target_link_libraries(visit PRIVATE benchmark::benchmark benchmark::benchmark_main)
+
+add_executable(polyshape polyshape.cpp)
+target_link_libraries(polyshape PRIVATE benchmark::benchmark benchmark::benchmark_main)

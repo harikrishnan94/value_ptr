@@ -3,8 +3,13 @@
 #include <numbers>
 #include <variant>
 
-template <typename Numeric, typename Derived> struct AbstractShape {
-  [[nodiscard]] constexpr auto Area() const -> Numeric { return impl()->compute_area(); }
+template <typename Numeric> struct IShape {
+  virtual ~IShape() = default;
+  virtual auto Area() const -> Numeric = 0;
+};
+
+template <typename Numeric, typename Derived> struct AbstractShape : IShape<Numeric> {
+  [[nodiscard]] auto Area() const -> Numeric override { return impl()->compute_area(); }
 
 private:
   [[nodiscard]] auto impl() const -> const Derived * { return static_cast<const Derived *>(this); }
